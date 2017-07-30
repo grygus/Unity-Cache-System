@@ -15,11 +15,11 @@ public class UnityStorageLog : MonoBehaviour
     [SerializeField]
     private int Count;
 
-    private Dictionary<Type, TypeLog> _typeDic;
+    public Dictionary<Type, TypeLog> TypeDic;
 
     private void Awake()
     {
-        _typeDic = new Dictionary<Type, TypeLog>();
+        TypeDic = new Dictionary<Type, TypeLog>();
         var pool = Cache<GameObject>.DefaultPool;
         var intPool = Cache<Rigidbody>.DefaultPool;
         Initialize();
@@ -40,7 +40,7 @@ public class UnityStorageLog : MonoBehaviour
             };
 
             LogTypes.Add(log);
-            _typeDic[argumentType] = log;
+            TypeDic[argumentType] = log;
             log.Count = CacheLog.CacheCounter[argumentType];
 //            SubscribeToCacheEvents(cacheType);
         }
@@ -51,7 +51,7 @@ public class UnityStorageLog : MonoBehaviour
     public void AddedHandler(object sender, object arg)
     {
         var argumentType = sender.GetType().GetGenericArguments()[0];
-        if (!_typeDic.ContainsKey(argumentType))
+        if (!TypeDic.ContainsKey(argumentType))
         {
             var log = new TypeLog()
             {
@@ -59,19 +59,19 @@ public class UnityStorageLog : MonoBehaviour
 
             };
             LogTypes.Add(log);
-            _typeDic[argumentType] = log;
+            TypeDic[argumentType] = log;
             log.Count = CacheLog.CacheCounter[argumentType];
         }
         else
         {
-            _typeDic[argumentType].Count++;
+            TypeDic[argumentType].Count++;
         }
     }
 
     public void RemovedHandler(object sender, object arg)
     {
         var argumentType = sender.GetType().GetGenericArguments()[0];
-        _typeDic[argumentType].Count--;
+        TypeDic[argumentType].Count--;
     }
 
     private void SubscribeToCacheEvents(Type cacheType)

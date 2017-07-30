@@ -8,8 +8,9 @@ namespace Grygus.Utilities.Pool
 {
     public static partial class Cache<T> where T : class
     {
-        private class CacheInternal : IPool<T>
+        private class CacheInternal : IPool,IPool<T>
         {
+            public string Name { get; private set; }
             public HashSet<T> _poolSet;
             public Queue<T> _poolOrder;
 
@@ -21,8 +22,9 @@ namespace Grygus.Utilities.Pool
             private Func<T> _factoryMethod;
             private Action<T> _resetMethod;
 
-            public CacheInternal()
+            public CacheInternal(string name)
             {
+                Name = name;
                 TryGetDefaultConstructor();
                 _poolSet = new HashSet<T>();
                 _poolOrder = new Queue<T>();
@@ -55,7 +57,7 @@ namespace Grygus.Utilities.Pool
                     Removed(this, itemToPop);
                     return itemToPop;
                 }
-                throw new NotImplementedException();
+                throw new NoObjectsInPoolException(typeof(T),Name);
             }
 
             public void Push(T instance)
@@ -69,7 +71,7 @@ namespace Grygus.Utilities.Pool
                 }
                 else
                 {
-                    throw new NotImplementedException();
+                    throw new ObjectAlreadyInPoolException();
                 }
             }
 

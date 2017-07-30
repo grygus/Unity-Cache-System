@@ -19,4 +19,9 @@ namespace Grygus.Utilities.Pool
         IPool<T> SetResetAction(Action<T> resetAction);
         void Clear();
     }
+
+    public interface IPool
+    {
+        string Name { get; }
+    }
 }

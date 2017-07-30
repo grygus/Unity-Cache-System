@@ -91,6 +91,10 @@
       <Project>{b47f0079-7c45-ea68-5ac1-ad701bc75fda}</Project>
       <Name>Cartoon Dash.CSharp</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\Cartoon Dash.CSharp.Plugins.csproj">
+      <Project>{2cb802d9-d3a0-8a35-474d-46299c52d38c}</Project>
+      <Name>Cartoon Dash.CSharp.Plugins</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

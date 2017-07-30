@@ -12,20 +12,31 @@ namespace Grygus.Utilities.Pool
         public static event CacheCahangedEventHandler AnyAdded;
         public static event CacheCahangedEventHandler AnyRemoved;
         public static Dictionary<Type, int> CacheCounter;
+        public static Dictionary<Type, Dictionary<string,int>> NamedCacheCounter;
         private static List<Type> _cacheTypes = new List<Type>();
 
         static CacheLog()
         {
             CacheCounter = new Dictionary<Type, int>();
+            NamedCacheCounter = new Dictionary<Type, Dictionary<string,int>>();
             AnyAdded += (sender, args) =>
             {
                 var argumentType = sender.GetType().GetGenericArguments()[0];
                 CacheCounter[argumentType]++;
+                var pool = (IPool) sender;
+                var poolCache = NamedCacheCounter[argumentType]; 
+                if(poolCache.ContainsKey(pool.Name))
+                    poolCache[pool.Name]++;
+                else
+                    poolCache[pool.Name] = 1;
             };
             AnyRemoved += (sender, args) =>
             {
                 var argumentType = sender.GetType().GetGenericArguments()[0];
                 CacheCounter[argumentType]--;
+                var pool = (IPool) sender;
+                var poolCache = NamedCacheCounter[argumentType];
+                poolCache[pool.Name]--;
             };
 
         }
@@ -43,7 +54,10 @@ namespace Grygus.Utilities.Pool
 
         public static void AddType(Type cacheType)
         {
-            CacheCounter[cacheType.GetGenericArguments()[0]] = 0;
+            var argumentType = cacheType.GetGenericArguments()[0]; 
+            CacheCounter[argumentType] = 0;
+            NamedCacheCounter[argumentType] = new Dictionary<string, int>();
+
             _cacheTypes.Add(cacheType);
             var eventInfo = cacheType.GetEvent("AddedAny");
             SubscriveToEvent(eventInfo, null, "OnAnyAdded");

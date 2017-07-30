@@ -5,6 +5,15 @@ using System.Text;
 
 namespace Grygus.Utilities.Pool
 {
+//    public class PoolStatus
+//    {
+//        public string Name;
+//        public string Count;
+//    }
+//    public interface IRegisterLog
+//    {
+//        List<PoolStatus> GetLog();
+//    }
     public static partial class Cache<T> where T : class
     {
         public class CacheRegister
@@ -24,7 +33,7 @@ namespace Grygus.Utilities.Pool
                 {
                     if (!_namedCache.ContainsKey(poolName))
                     {
-                        _namedCache[poolName] = new CacheInternal();
+                        _namedCache[poolName] = new CacheInternal(poolName);
                         _namedCache[poolName].Added += (sender, arg) => AddedAny(sender, arg);
                         _namedCache[poolName].Removed += (sender, arg) => RemovedAny(sender, arg);
                     }

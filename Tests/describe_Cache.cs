@@ -124,6 +124,29 @@ namespace Grygus.Utilities.Pool
                 myCache.Pop().Name.ShouldBeSameAs("Reset");
             }
         }
+
+
+
+        public class when_subscribing_to_register_events : given.the_sample_class_cache
+        {
+            protected override void When()
+            {
+                var myCache = Cache<SampleClass>.DefaultPool;
+                myCache.SetResetAction((instance) => instance.Name = "Reset");
+                myCache.Generate(1);
+                var sampleInstance = myCache.Pop();
+                sampleInstance.Name = "Popped";
+                myCache.Push(sampleInstance);
+            }
+
+            [Test]
+            public void then_it_should_have_elements_with_reset_name()
+            {
+
+                var myCache = Cache<SampleClass>.DefaultPool;
+                myCache.Pop().Name.ShouldBeSameAs("Reset");
+            }
+        }
     }
 
     public class SampleClass
