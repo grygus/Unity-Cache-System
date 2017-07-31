@@ -17,6 +17,11 @@ namespace Grygus.Utilities.Pool
         IPool<T> Generate(int count);
         IPool<T> SetFactory(Func<T> factoryFunc);
         IPool<T> SetResetAction(Action<T> resetAction);
+        IPool<T> AllowExpand();
+        IPool<T> DoNotExpand();
+        IPool<T> AllowRecycle();
+        IPool<T> DoNotRecycle();
+        IPool<T> Reset();
         void Clear();
     }
 

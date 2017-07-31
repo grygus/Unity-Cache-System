@@ -48,7 +48,7 @@ namespace Grygus.Utilities.Pool
                 Cache<SampleClass>.Caches["MyCache"].Count.ShouldEqual(2);
             }
         }
-        
+
         public class when_pulling_from_cache : given.the_sample_class_cache
         {
             protected override void When()
@@ -127,16 +127,18 @@ namespace Grygus.Utilities.Pool
 
 
 
-        public class when_subscribing_to_register_events : given.the_sample_class_cache
+        public class when_Allowing_To_Expand : given.the_sample_class_cache
         {
             protected override void When()
             {
                 var myCache = Cache<SampleClass>.DefaultPool;
-                myCache.SetResetAction((instance) => instance.Name = "Reset");
-                myCache.Generate(1);
-                var sampleInstance = myCache.Pop();
-                sampleInstance.Name = "Popped";
-                myCache.Push(sampleInstance);
+                myCache.AllowExpand().Generate(1);
+                var instance1 = myCache.Pop();
+                var instance2 = myCache.Pop();
+                var instance3 = myCache.Pop();
+                myCache.Push(instance1);
+                myCache.Push(instance2);
+                myCache.Push(instance3);
             }
 
             [Test]
@@ -144,7 +146,45 @@ namespace Grygus.Utilities.Pool
             {
 
                 var myCache = Cache<SampleClass>.DefaultPool;
-                myCache.Pop().Name.ShouldBeSameAs("Reset");
+                myCache.Count.ShouldEqual(3);
+            }
+        }
+
+        public class when_allowing_to_recycle_with_one_element_in_cache : given.the_sample_class_cache
+        {
+            protected override void When()
+            {
+                var myCache = Cache<SampleClass>.DefaultPool;
+                myCache.AllowRecycle().Generate(1);
+            }
+
+            [Test]
+            public void then_all_pop_elements_should_be_the_same()
+            {
+
+                var myCache = Cache<SampleClass>.DefaultPool;
+
+                myCache.Count.ShouldEqual(1);
+
+                var instance1 = myCache.Pop();
+                var instance2 = myCache.Pop();
+
+                instance1.ShouldEqual(instance2);
+                myCache.Count.ShouldEqual(0);
+            }
+
+            [Test]
+            public void then_recycled_element_should_reset()
+            {
+                var myCache = Cache<SampleClass>.DefaultPool;
+                myCache.SetResetAction(instance => instance.count = 0);
+
+                var instance1 = myCache.Pop();
+                instance1.count++;
+                var instance2 = myCache.Pop();
+                instance2.count++;
+                var instance3 = myCache.Pop();
+                instance3.count.ShouldEqual(0);
             }
         }
     }
@@ -152,5 +192,6 @@ namespace Grygus.Utilities.Pool
     public class SampleClass
     {
         public string Name = string.Empty;
+        public int count = 0;
     }
 }
