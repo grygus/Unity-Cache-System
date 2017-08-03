@@ -125,8 +125,6 @@ namespace Grygus.Utilities.Pool
             }
         }
 
-
-
         public class when_Allowing_To_Expand : given.the_sample_class_cache
         {
             protected override void When()
