@@ -30,7 +30,7 @@ namespace Grygus.Utilities.Pool.Unity
                 parent.transform.parent = transform;
                 _caches[pool.Prefab.name].SetFactory(() =>
                     {
-                        var gm = new GameObject();
+                        var gm = Instantiate(pool.Prefab);
                         gm.transform.parent = parent.transform;
                         return gm;
                     })

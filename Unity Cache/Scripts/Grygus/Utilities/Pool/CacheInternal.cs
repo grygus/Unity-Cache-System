@@ -11,10 +11,11 @@ namespace Grygus.Utilities.Pool
         private class CacheInternal : IPool,IPool<T>
         {
             public string Name { get; private set; }
-            public HashSet<T> _poolSet;
-            public Queue<T> _poolOrder;
-            public HashSet<T> _deploySet;
-            public List<T> _deployOrder;
+
+            private HashSet<T> _poolSet;
+            private Queue<T> _poolOrder;
+            private HashSet<T> _deploySet;
+            private List<T> _deployOrder;
 
             public int Count { get { return _poolSet.Count; } }
 

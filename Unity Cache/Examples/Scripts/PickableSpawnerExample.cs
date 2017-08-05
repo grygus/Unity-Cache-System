@@ -1,12 +1,19 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using Grygus.Utilities.Pool;
+using Grygus.Utilities.Pool.Unity;
 
 public class PickableSpawnerExample : MonoBehaviour
 {
-    [SerializeField]
-    private GameObject _prefab;
+    public enum ESpawnerType
+    {
+        Line,
+        Circle    
+    }
+
+    [SerializeField] private GameObject _prefab;
     [SerializeField]
     private float _spawnDistance;
     [SerializeField]
@@ -14,7 +21,7 @@ public class PickableSpawnerExample : MonoBehaviour
     [SerializeField]
     private int _maxSpawned;
     [SerializeField]
-    private int _maxDistance;
+    private float _maxDistance;
 
     [SerializeField] private AnimationCurve _spawnRatio;
     [SerializeField] private float _ratioTimer;
@@ -24,6 +31,20 @@ public class PickableSpawnerExample : MonoBehaviour
     private float _lastSpawnDistance;
 
     private List<GameObject> _activeGameObjects;
+//    [Header("Line Settings")]
+    [SerializeField]
+    private ESpawnerType _eSpawner;
+    [SerializeField]
+    private float _circleRadius;
+
+    [SerializeField] private bool _clampDistanceToCircle;
+    public UnityPool CachePool;
+
+    private void OnValidate()
+    {
+        if (_clampDistanceToCircle)
+            _maxDistance = _circleRadius * Mathf.PI * 2;
+    }
     // Use this for initialization
     void Start()
     {
@@ -72,7 +93,31 @@ public class PickableSpawnerExample : MonoBehaviour
         _lastSpawnDistance = distance;
         var pickable = GetPickable();
         _activeGameObjects.Add(pickable);
-        Spawn(pickable, transform.position + Vector3.forward * distance, transform.rotation);
+        Spawn(pickable, transform.position+GetNextPosition(), transform.rotation);
+    }
+
+    private Vector3 GetNextPosition()
+    {
+        var position = Vector3.zero;
+        var distance = _lastSpawnDistance + _spawnDistance;
+        if (distance > _maxDistance)
+            distance = 0;
+        _lastSpawnDistance = distance;
+        switch (_eSpawner)
+        {
+            case ESpawnerType.Line:
+                position = Vector3.forward * distance;
+                break;
+            case ESpawnerType.Circle:
+                var ratio = distance / (_circleRadius * Mathf.PI * 2);
+                var x = _circleRadius * Mathf.Cos(Mathf.PI * 2 * ratio);
+                var y = _circleRadius * Mathf.Sin(Mathf.PI * 2 * ratio);
+                position = new Vector3(x,0,y);
+                break;
+            default:
+                throw new ArgumentOutOfRangeException();
+        }
+        return position;
     }
 
     private GameObject GetPickable()
