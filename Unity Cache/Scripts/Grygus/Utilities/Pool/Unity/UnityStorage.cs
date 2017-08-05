@@ -28,7 +28,8 @@ namespace Grygus.Utilities.Pool.Unity
                 var pool = _pools[i];
                 var parent = new GameObject(pool.Prefab.name);
                 parent.transform.parent = transform;
-                _caches[pool.Prefab.name].SetFactory(() =>
+                var cache = _caches[pool.Prefab.name];
+                cache.SetFactory(() =>
                     {
                         var gm = Instantiate(pool.Prefab);
                         gm.transform.parent = parent.transform;
@@ -39,6 +40,10 @@ namespace Grygus.Utilities.Pool.Unity
                         item.SetActive(false);
                     })
                     .Generate(pool.Size);
+
+
+                if (pool.AllowExpand) cache.AllowExpand();
+                if (pool.AllowRecycle) cache.AllowRecycle();
             }
         }
 
