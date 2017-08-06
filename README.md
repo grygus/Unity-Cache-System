@@ -18,7 +18,7 @@ var myPool = Cache<MyClass>.DefaultPool;
   * Supports Fluent API
 
 
-![alt text](/Docs/Pool UML.png)
+![alt text](/Docs/PoolUML.png)
 ## Code Example
 
 ```csharp
