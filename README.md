@@ -1,7 +1,20 @@
-## Synopsis
+## First glimpse
 
-At the top of the file there should be a short introduction and/ or overview that explains **what** the project is. This description should match descriptions added for package managers (Gemspec, package.json, etc.)
-
+```csharp
+//Generate objects in default pool for given class
+Cache<MyClass>.Generate(10);
+//Retrieve object from pool
+var instance = Cache<MyClass>.Pop();
+//Return object to pool
+Cache<MyClass>.Push(instance);
+//Shortcut for accessing default pool
+var myPool = Cache<MyClass>.DefaultPool;
+```
+## Overview
+  Unity Cache is simple solution for pooling objects. Especially made for Unity3D but its core can be used outside of this engine.
+  * Custom Inspector for Unity3D
+  * Can be used for every class not only GameObjects;
+  * Very flexible and easy to use
 ## Code Example
 
 ```csharp
@@ -28,24 +41,23 @@ Cache<GameObject>.Caches["Coins"]
 ```
 ## Motivation
 
-A short description of the motivation behind the creation and maintenance of the project. This should explain **why** the project exists.
+Pooling objects can be the most important performance boost in every game or application,
+Main purpose of this library is to made this as simple and straightforward to operation as possible.
 
 ## Installation
 
-Provide code examples and explanations of how to get the project.
+1) Add this repository as submodule to your projects, prefered directory "{YouGame}\Submodules\"
 
+2) Symlink "UnityCache" folder to your "Assets\Plugins\" folder
 ## API Reference
-
-Depending on the size of the project, if it is small and simple enough the reference docs can be added to the README. For medium size to larger projects it is important to at least provide a link to where the API reference docs live.
 
 ## Tests
 
-Describe and show how to run the tests with code examples.
+Tests are written with SpecsFor library.
 
 ## Contributors
 
-Let people know how they can dive into the project, include important links to things like issue trackers, irc, twitter accounts if applicable.
+
 
 ## License
-
-A short snippet describing the license (MIT, Apache, etc.)
+GNU GENERAL PUBLIC LICENSE
