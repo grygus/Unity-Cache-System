@@ -18,7 +18,7 @@ var myPool = Cache<MyClass>.DefaultPool;
   * Supports Fluent API
 
 
-![alt text](Docs\Pool UML.png "")
+![alt text](/Docs/Pool UML.png)
 ## Code Example
 
 ```csharp
@@ -51,8 +51,8 @@ Among all other pooling solutioins this one do not concentrate only on GameObjec
 
 # Editor Helpers
 
-![alt text](Docs\UnityStorage.png "")
-![alt text](Docs\UnityStorageLog.png "")
+![alt text](/Docs/UnityStorage.png)
+![alt text](/Docs/UnityStorageLog.png)
 ## Installation
 
 1) Add this repository as submodule to your projects, prefered directory "{YouGame}\Submodules\"
