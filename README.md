@@ -15,6 +15,10 @@ var myPool = Cache<MyClass>.DefaultPool;
   * Custom Inspector for Unity3D
   * Can be used for every class not only GameObjects;
   * Very flexible and easy to use
+  * Supports Fluent API
+
+
+![alt text](Docs\Pool UML.png "")
 ## Code Example
 
 ```csharp
@@ -43,7 +47,12 @@ Cache<GameObject>.Caches["Coins"]
 
 Pooling objects can be the most important performance boost in every game or application,
 Main purpose of this library is to made this as simple and straightforward to operation as possible.
+Among all other pooling solutioins this one do not concentrate only on GameObjects. U can use pooling for all class types;
 
+# Editor Helpers
+
+![alt text](Docs\UnityStorage.png "")
+![alt text](Docs\UnityStorageLog.png "")
 ## Installation
 
 1) Add this repository as submodule to your projects, prefered directory "{YouGame}\Submodules\"
